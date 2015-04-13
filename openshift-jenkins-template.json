@@ -1,0 +1,62 @@
+{
+  "id": "atos-jenkins-config",
+  "kind": "Config",
+  "apiVersion": "v1beta1",
+  "name": "atos-jenkins-config",
+  "description": "Configuration for jenkins",
+  "items": [
+    {
+      "apiVersion": "v1beta2",
+      "containerPort": 8080,
+      "creationTimestamp": null,
+      "id": "atosjenkins",
+      "kind": "Service",
+      "port": 5002,
+      "selector": {
+        "component": "atosjenkins"
+      }
+    },
+    {
+      "id": "atos-jenkins-controller",
+      "kind": "ReplicationController",
+      "apiVersion": "v1beta1",
+      "desiredState": {
+        "replicas": 1,
+        "replicaSelector": {
+          "component": "atosjenkins"
+        },
+        "podTemplate": {
+          "desiredState": {
+            "manifest": {
+              "version": "v1beta1",
+              "id": "atosjenkinsPod",
+              "containers": [
+                {
+                  "name": "atos-jenkins-container",
+                  "image": "${DOCKER_REGISTRY}/atos/jenkins:1.0-SNAPSHOT",
+                  "imagePullPolicy": "PullAlways",
+                  "env": [
+                  ],
+                  "ports": [
+                    {
+                      "containerPort": 8778
+                    },
+                    {
+                      "containerPort": 8080
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "labels": {
+            "component": "atosjenkins"
+          }
+        }
+      },
+      "labels": {
+        "component": "atosjenkins"
+      }
+    }
+  ]
+}
