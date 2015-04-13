@@ -14,8 +14,9 @@ RUN yum -y install sudo passwd
 RUN echo "jenkins:jenkins" | chpasswd
 RUN usermod -a -G wheel jenkins # allows sudo
 
-# docker is on 1.3.x this upgrades to latest version (e.g. 1.5)
-RUN yum -y update docker
+# centos yum repo provides a dev version of docker for 1.5 that uses API 1.18. this breaks boot2docker compatibility
+# so for now, forcing 1.4.1
+RUN yum -y install docker-1.4.1-37.el7.centos
 
 RUN yum -y install java-1.7.0-openjdk-devel.x86_64 maven.noarch
 
@@ -32,11 +33,11 @@ RUN chmod 755 /usr/local/bin/jenkins-cli
 USER jenkins
 
 # this lets docker client access the local (insecure!) docker host
-RUN echo "export DOCKER_IP=`ip route show 0.0.0.0/0 | grep -Eo 'via \S+' | awk '{ print $2 }'`" >> ~/.bash_profile
-RUN echo "export DOCKER_HOST=tcp://$DOCKER_IP:2375" >> ~/.bash_profile
+RUN echo "export DOCKER_IP=`ip route show 0.0.0.0/0 | grep -Eo 'via \S+' | awk '{ print $2 }'`" >> ~/.profile
+RUN echo "export DOCKER_HOST=tcp://\$DOCKER_IP:2375" >> ~/.profile
 
 # Install Plugins
-# originally i wantd to use the cli for plugins but because jenkins isn't running
+# originally i wanted to use the cli for plugins but because jenkins isn't running
 # when processing this script it didn't work. rather than fix that, in the short term it was easier
 # to just dump the plugins into the jenkins-home/plugin folder. note that this
 # means you have to install dependencies yourselves
