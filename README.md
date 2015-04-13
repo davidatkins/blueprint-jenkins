@@ -7,7 +7,7 @@ This is a general purpose Jenkins Image. It extends the baseline OpenShift Jenki
 * Git Support, including GitHub
 * The Env Inject Plugin
 
-Note that this article is really good, and should probably be reviewed for any future iterations of this image - http://container-solutions.com/2015/03/running-docker-in-jenkins-in-docker/. Of interest is using the official docker image with plugins.txt, and the part about Docker In Docker.
+At some point it may be worth moving to the official docker container, because it has slightly nicer support for installing plugins
 
 ## Run
 
@@ -17,9 +17,9 @@ A build is available on bintray. You can install as follows:
 
 Check 'docker ps' to find the port that 8080 has been forwarded to
 
-### Configure Docker Client Access
+### Configure Docker for Builds
 
-The jenkins container includes the latest docker client, but it'll only work if your docker host allow insecure connections (yes, this needs fixing!).
+You may want to execute docker commands from jenkins builds. The jenkins container includes the latest docker client, but it'll only work if your docker host allow insecure connections (yes, this needs fixing, see http://container-solutions.com/2015/03/running-docker-in-jenkins-in-docker/ for options)
 
 If using boot2docker, you can enable insecure access as follows. Please check warnings from Docker peeps before doing this!
 
@@ -38,6 +38,8 @@ If you're using mac/linux and still want your local docker client to work, you'l
 
 Note the change in port from 2376 to 2375
 
+If pushing to a private repo, you'll also need to add auth details to docker container's ~/.dockercfg file
+
 # Building
 
      docker build -t blueprint/jenkins:1.0.0 .
@@ -48,7 +50,3 @@ Look at the [README for the blueprint-activemq](http://github.com/davidatkins/bl
 
     docker tag blueprint/jenkins:1.0.0 davidatkins-docker-registry.bintray.io/blueprint/jenkins:1.0.0
     docker push davidatkins-docker-registry.bintray.io/blueprint/jenkins:1.0.0
-
-# TODO
-
-Need to make this work with secure docker registry (provide straight forward instructions to setup)

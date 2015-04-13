@@ -14,9 +14,10 @@ RUN yum -y install sudo passwd
 RUN echo "jenkins:jenkins" | chpasswd
 RUN usermod -a -G wheel jenkins # allows sudo
 
-# centos yum repo provides a dev version of docker for 1.5 that uses API 1.18. this breaks boot2docker compatibility
-# so for now, forcing 1.4.1
-RUN yum -y install docker-1.4.1-37.el7.centos
+# centos default extras yum repo provides a dev version of docker for 1.5 that uses API 1.18. this breaks boot2docker compatibility
+# so instead we use the mysterious (to me) virt7-testing repository. this version of docker uses client API 1.17
+COPY resources/virt7-testing.repo /etc/yum.repos.d/virt7-testing.repo
+RUN yum --enablerepo=virt7-testing -y install docker-1.5.0-1.el7
 
 RUN yum -y install java-1.7.0-openjdk-devel.x86_64 maven.noarch
 
