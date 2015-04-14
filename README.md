@@ -13,9 +13,11 @@ At some point it may be worth moving to the official docker container, because i
 
 A build is available on bintray. You can install as follows:
 
-    docker run -Pit davidatkins-docker-registry.bintray.io/blueprint/jenkins:1.0.0
+    docker run -it -p 8181:8181 davidatkins-docker-registry.bintray.io/blueprint/jenkins:1.0.0
 
-Check 'docker ps' to find the port that 8080 has been forwarded to
+And then connect using:
+
+    http://$(boot2docker ip 2>/dev/null):8181
 
 ### Configure Docker for Builds
 
