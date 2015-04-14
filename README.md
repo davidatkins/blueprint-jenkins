@@ -9,11 +9,15 @@ This is a general purpose Jenkins Image. It extends the baseline OpenShift Jenki
 
 At some point it may be worth moving to the official docker container, because it has slightly nicer support for installing plugins
 
+TODO:
+
+Because jenkins jobs/config isn't stored on a volume, everythig is lost when container is stopped
+
 ## Run
 
 A build is available on bintray. You can install as follows:
 
-    docker run -it -p 8181:8181 davidatkins-docker-registry.bintray.io/blueprint/jenkins:1.0.0
+    docker run -it -p 8181:8080 davidatkins-docker-registry.bintray.io/blueprint/jenkins:1.0.0
 
 And then connect using:
 
